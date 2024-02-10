@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
+ 
 { config, pkgs, ... }:
 
 {
@@ -13,7 +13,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   networking.hostName = "peridot"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -81,24 +80,39 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  virtualisation.docker.enable = true;
+  containers.docker = {
+    privateNetwork = false;
+    path = "/home/peridot";
+  };
+  networking.firewall.trustedInterfaces = [ "docker0" ];
+
   users.users.peridot = {
     isNormalUser = true;
     description = "Nicolas Gabin";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       firefox
       vim_configurable
       curl
+      wget
       git
       direnv
       nix-direnv
       awscli2
       neofetch
       obsidian
-    #  thunderbird
+      thunderbird
+      docker
+      docker-compose
+      htop
     ];
   };
+
+  fonts.packages = with pkgs; [
+    fira-code
+    fira-code-symbols
+  ];
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
@@ -128,7 +142,7 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 8888 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
