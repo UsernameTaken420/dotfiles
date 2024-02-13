@@ -62,15 +62,15 @@
 
   # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
-    enable = true;
+    enable = false;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
@@ -98,6 +98,7 @@
       wget
       git
       direnv
+      mpv
       nix-direnv
       awscli2
       neofetch
@@ -105,7 +106,10 @@
       thunderbird
       docker
       docker-compose
-      htop
+      aflplusplus
+      jq
+      # htop
+      # tmux
     ];
   };
 
@@ -125,7 +129,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    wget
+    # eww
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -142,10 +147,10 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 8888 ];
+  # networking.firewall.allowedTCPPorts = [ 8888 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -165,4 +170,6 @@
   nixpkgs.config.permittedInsecurePackages = [
       "electron-25.9.0"
   ];
+
+  nix.gc.automatic = true;  
 }
