@@ -110,6 +110,8 @@
       jq
       # htop
       # tmux
+      burpsuite
+      insomnia
     ];
   };
 
@@ -171,5 +173,6 @@
       "electron-25.9.0"
   ];
 
-  nix.gc.automatic = true;  
+  nix.gc.automatic = true;
+  security.pki.certificateFiles = [ "/home/peridot/Downloads/cacert.der" ];  
 }
