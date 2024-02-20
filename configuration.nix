@@ -103,7 +103,7 @@
       awscli2
       neofetch
       obsidian
-      thunderbird
+      # thunderbird
       docker
       docker-compose
       aflplusplus
@@ -112,6 +112,7 @@
       # tmux
       burpsuite
       insomnia
+      prismlauncher
     ];
   };
 
