@@ -13,7 +13,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  networking.hostName = "peridot"; # Define your hostname.
+  networking.hostName = "homeworld"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -89,6 +89,7 @@
 
   users.users.peridot = {
     isNormalUser = true;
+    #shell = pkgs.zsh;
     description = "Nicolas Gabin";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
@@ -113,6 +114,10 @@
       burpsuite
       insomnia
       prismlauncher
+      #zsh
+      #oh-my-zsh
+      #zsh-completions
+      #zsh-syntax-highlighting
     ];
   };
 
@@ -120,6 +125,9 @@
     fira-code
     fira-code-symbols
   ];
+  programs.vim = {
+    defaultEditor = true;
+  };
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
@@ -176,4 +184,11 @@
 
   nix.gc.automatic = true;
   security.pki.certificateFiles = [ "/home/peridot/Downloads/cacert.der" ];  
+  security.sudo.wheelNeedsPassword = false;
+  #programs.zsh = {
+  #  enable = true;
+  #  ohMyZsh = {
+  #    enable = true;
+  #  };
+  #};
 }
