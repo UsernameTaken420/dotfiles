@@ -89,7 +89,6 @@
 
   users.users.peridot = {
     isNormalUser = true;
-    #shell = pkgs.zsh;
     description = "Nicolas Gabin";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
@@ -104,20 +103,14 @@
       awscli2
       neofetch
       obsidian
-      # thunderbird
       docker
       docker-compose
       aflplusplus
       jq
-      # htop
-      # tmux
       burpsuite
       insomnia
       prismlauncher
-      #zsh
-      #oh-my-zsh
-      #zsh-completions
-      #zsh-syntax-highlighting
+      minecraft-server
     ];
   };
 
@@ -141,6 +134,7 @@
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    k3s
     # eww
   ];
 
@@ -158,10 +152,10 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ 8888 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 8888 6443 ];
+  networking.firewall.allowedUDPPorts = [ 8472 ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -185,10 +179,32 @@
   nix.gc.automatic = true;
   security.pki.certificateFiles = [ "/home/peridot/Downloads/cacert.der" ];  
   security.sudo.wheelNeedsPassword = false;
-  #programs.zsh = {
-  #  enable = true;
-  #  ohMyZsh = {
-  #    enable = true;
-  #  };
-  #};
+  services.minecraft-server = {
+    eula = true;
+    openFirewall = true;
+    enable = false;
+    serverProperties = {
+      server-port = 25565;
+      motd = "Nico's Minecraft Server";
+    };
+
+    package = let
+      version = "1.20.4";
+      url = "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar";
+      sha256 = "c03fa6f39daa69ddf413c965a3a83084db746a7a138ce535a693293b5472d363";
+    in (pkgs.minecraft-server.overrideAttrs (old: rec {
+      name = "minecraft-server-${version}";
+      inherit version;
+
+      src = pkgs.fetchurl {
+        inherit url sha256;
+      };
+    }));
+  };
+
+  services.k3s = {
+    enable = true;
+    role = "server";
+    extraFlags = "--kubelet-arg=v=4";
+  };
 }
