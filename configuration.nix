@@ -80,12 +80,20 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  virtualisation.docker.enable = true;
-  containers.docker = {
-    privateNetwork = false;
-    path = "/home/peridot";
+  # virtualisation.docker.enable = true;
+  # containers.docker = {
+    # privateNetwork = false;
+    # path = "/home/peridot";
+  # };
+  # networking.firewall.trustedInterfaces = [ "docker0" ];
+
+  virtualisation = {
+    podman = {
+      enable = false;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
   };
-  networking.firewall.trustedInterfaces = [ "docker0" ];
 
   users.users.peridot = {
     isNormalUser = true;
@@ -103,8 +111,8 @@
       awscli2
       neofetch
       obsidian
-      docker
-      docker-compose
+      # docker
+      # docker-compose
       aflplusplus
       jq
       burpsuite
@@ -112,6 +120,21 @@
       prismlauncher
       minecraft-server
     ];
+    shell = pkgs.zsh;
+  };
+
+  programs.zsh = {
+    enable = true;
+    syntaxHighlighting.enable = true;
+    ohMyZsh = {
+      enable = true;
+      theme = "jonathan";
+      plugins = [
+        "git"
+        "direnv"
+        "history"
+      ];
+    };
   };
 
   fonts.packages = with pkgs; [
@@ -203,7 +226,7 @@
   };
 
   services.k3s = {
-    enable = true;
+    enable = false;
     role = "server";
     extraFlags = "--kubelet-arg=v=4";
   };
