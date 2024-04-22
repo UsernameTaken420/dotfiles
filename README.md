@@ -1,2 +1,2 @@
 ### Dotfiles
-Dotfiles for zsh and vim, for now
+My dotfiles for zsh, bash, vim and my NixOS config.
