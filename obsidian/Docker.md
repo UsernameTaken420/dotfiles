@@ -1,0 +1,42 @@
+Platform for automating deployments inside containers (meant to run single tasks rather than an entire OS).
+
+## Common commands
+- `docker images` lists the available images
+- `docker run [imagename] command` runs the specified command inside the image
+	- `-ti` interactive terminal
+	- `--rm` kill the container once the command finishes
+	- `-d` detached mode
+	- `-p [published port:internal port]` publish internal docker port to port on docker host
+	- `--net [NetName]` assigns the given name to the network
+	- `-v [path/to/folder]:/volumeName` defines a place to persist any container data
+		- `--mount` is more verbose and may be preferred
+		- `--mount type=bind, source=/data/mysql,target=/var/lib/mysql`
+	- `--volumes-from containerName` copies the volume setup of target container
+	- `--restart=always` starts the container as soon as it stops
+	- `-e [varName]=[value]` sets an environment value inside the container
+	- `--link [contName]:[contName]`
+	- `--cpus=.5` limit CPU use to 50%
+	- `--memory=100m` limits memory use
+- `docker pull [imageName]` gets an image from the docker repository
+---
+- `docker ps` lists running containers
+	- `-a` all containers including stopped
+	- `-l` last container
+- `docker inspect [name]` gets detailed information (creation date, shell, etc) of container
+- `docker stats` get resource consumption (CPU, memory, network I/O) for every container
+- `docker top [name]` view all processes inside a container
+- `docker commit [imageID]` commits state of the container into new image
+- `docker tag [sha256] [name]` names the image
+- `docker commit [imageID] [name]` applies docker tag to the commit result
+- `docker attach [containerName]` jump into detached container
+	- `Ctrl+P, Ctrl+Q` detaches from current one
+- `docker exec` add process to container
+- `docker logs` see logs for given container
+- `docker kill [containerName]` stops the container
+- `docker rm [containerName]` removes the stopped container
+- `docker network ls` lists existing networks
+- `docker network create` creates a new network
+---
+- `docker network connect [networkName] [containerName]` adds container to network
+- `docker build` executes a [[Dockerfile]] in the current directory
+- `docker search [thing]` searches Docker Hub for images
